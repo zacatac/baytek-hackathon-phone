@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.dquid.bayteklib.BTMachineType;
@@ -19,7 +20,7 @@ import com.dquid.bayteklib.BTMachineType;
 import java.util.HashMap;
 
 
-public class MainActivity extends ActionBarActivity implements DQBaytekMachine.DQBaytekMachineListenerInterface{
+public class DefaultActivity extends ActionBarActivity implements DQBaytekMachine.DQBaytekMachineListenerInterface{
     private static final int REQUEST_CODE_VENMO_APP_SWITCH = 2402;
     static Context context;
     private DQBaytekMachine myMachine = null;
@@ -139,8 +140,8 @@ public class MainActivity extends ActionBarActivity implements DQBaytekMachine.D
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        MainActivity.context = MainActivity.this;
+        setContentView(R.layout.activity_default);
+        DefaultActivity.context = DefaultActivity.this;
         initUI();
     }
 
@@ -195,20 +196,31 @@ public class MainActivity extends ActionBarActivity implements DQBaytekMachine.D
                 if(resultCode == RESULT_OK) {
                     String signedrequest = data.getStringExtra("signedrequest");
                     if(signedrequest != null) {
-                        VenmoLibrary.VenmoResponse response = (new VenmoLibrary()).validateVenmoPaymentResponse(signedrequest, "app_secret");
+                        VenmoLibrary.VenmoResponse response = (new VenmoLibrary()).validateVenmoPaymentResponse(signedrequest, getString(R.string.venmo_app_secret));
                         if(response.getSuccess().equals("1")) {
                             //Payment successful.  Use data from response object to display a success message
-                            String note = response.getNote();
-                            String amount = response.getAmount();
+                            int duration = Toast.LENGTH_SHORT;
+
+                            Toast toast = Toast.makeText(context, response.getNote() + " : " + response.getAmount(), duration);
+                            toast.show();
                         }
                     }
                     else {
                         String error_message = data.getStringExtra("error_message");
+
                         //An error ocurred.  Make sure to display the error_message to the user
+                        int duration = Toast.LENGTH_SHORT;
+
+                        Toast toast = Toast.makeText(context, error_message, duration);
+                        toast.show();
                     }
                 }
                 else if(resultCode == RESULT_CANCELED) {
                     //The user cancelled the payment
+                    int duration = Toast.LENGTH_SHORT;
+
+                    Toast toast = Toast.makeText(context, "Transaction Cancelled", duration);
+                    toast.show();
                 }
                 break;
             }
@@ -245,7 +257,7 @@ public class MainActivity extends ActionBarActivity implements DQBaytekMachine.D
             @Override
             public void onClick(View v) {
                 // Init the DQBaytekMachine object
-                myMachine = new DQBaytekMachine(BTMachineType.BAYTEK_MACHINE_TYPE_FLAPPY_BIRD, MainActivity.this);
+                myMachine = new DQBaytekMachine(BTMachineType.BAYTEK_MACHINE_TYPE_FLAPPY_BIRD, DefaultActivity.this);
 
                 // Disable radio buttons and enable connect toggle
                 pianoRadio.setChecked(false);
@@ -260,21 +272,17 @@ public class MainActivity extends ActionBarActivity implements DQBaytekMachine.D
         venmoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent venmoIntent = VenmoLibrary.openVenmoPayment("2402", "Kick Ass", "nickwissman@berkeley.edu", "0.01", "FREE MONEY!", "pay");
+                Intent venmoIntent = VenmoLibrary.openVenmoPayment("2402", "Kick Ass", "nickwissman@berkeley.edu", "0.01", "Credits Purchase", "pay");
                 startActivityForResult(venmoIntent, REQUEST_CODE_VENMO_APP_SWITCH);
             }
         });
-
-
-
-
 
 
         pianoRadio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Init the DQBaytekMachine object
-                myMachine = new DQBaytekMachine(BTMachineType.BAYTEK_MACHINE_TYPE_PIANO_TILES, MainActivity.this);
+                myMachine = new DQBaytekMachine(BTMachineType.BAYTEK_MACHINE_TYPE_PIANO_TILES, DefaultActivity.this);
 
                 // Disable radio buttons and enable connect toggle
                 flappyRadio.setChecked(false);
@@ -290,7 +298,7 @@ public class MainActivity extends ActionBarActivity implements DQBaytekMachine.D
             @Override
             public void onClick(View v) {
                 // Init the DQBaytekMachine object
-                myMachine = new DQBaytekMachine(BTMachineType.BAYTEK_MACHINE_TYPE_PRIZE_HUB, MainActivity.this);
+                myMachine = new DQBaytekMachine(BTMachineType.BAYTEK_MACHINE_TYPE_PRIZE_HUB, DefaultActivity.this);
 
                 // Disable radio buttons and enable connect toggle
                 flappyRadio.setChecked(false);

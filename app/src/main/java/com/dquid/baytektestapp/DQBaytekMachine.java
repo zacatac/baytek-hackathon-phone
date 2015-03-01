@@ -16,6 +16,8 @@ import com.dquid.sdk.core.DQObjectListener;
 import com.dquid.sdk.core.DQProperty;
 import com.dquid.sdk.utils.StringUtils;
 
+import junit.framework.Assert;
+
 import org.apache.http.HttpResponse;
 
 /**
@@ -23,7 +25,7 @@ import org.apache.http.HttpResponse;
  */
 public class DQBaytekMachine extends BTProtocol implements BTRespListener, BTReqInterface, DQManagerListener, DQObjectListener, DataUploadRequestListener {
     private final String TAG = this.getClass().getSimpleName();
-    private String serialToLookFor = "0000000000000087";
+    private String serialToLookFor = "0000000000000100";
     private String serialInPropertyName = "srx";
     private String serialOutPropertyName = "stx";
     private DQObject dqobject = null;
@@ -72,6 +74,10 @@ public class DQBaytekMachine extends BTProtocol implements BTRespListener, BTReq
      * BTRespListener Methods
      * These callback methods are called as soon as a response from the machine is received
      */
+    public void setSerialToLookFor(String serial){
+        this.serialToLookFor = serial;
+    }
+
 
     @Override
     public void onMachineIDReceived(byte machineID) {
@@ -783,7 +789,7 @@ public class DQBaytekMachine extends BTProtocol implements BTRespListener, BTReq
     @Override
     public Context provideApplicationContext() {
         // DQuid SDK needs the application context, please provide it here;
-        return MainActivity.context;
+        return DefaultActivity.context;
     }
 
     @Override
