@@ -11,6 +11,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
+import android.widget.Button;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 
 /**
@@ -20,10 +24,37 @@ import android.support.v4.app.NavUtils;
  * @see SystemUiHider
  */
 public class PlayActivity extends Activity {
+    private TextView gameNameField;
+    private TextView gameIdField;
+    private TextView creditsRemainingField;
+    private Button addCreditButton;
+    private Button gameBrokenButton;
+    private Button doneButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
+        initUI();
+    }
+
+
+    void initUI(){
+        gameNameField = (TextView) findViewById(R.id.gameNameField);
+        gameIdField = (TextView) findViewById(R.id.gameIdField);
+        creditsRemainingField = (TextView) findViewById(R.id.creditsRemainingField);
+        addCreditButton = (Button) findViewById(R.id.addCreditButton);
+        gameBrokenButton = (Button) findViewById(R.id.gameBrokenButton);
+        doneButton = (Button) findViewById(R.id.doneButton);
+
+        doneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
     }
 
     @Override
