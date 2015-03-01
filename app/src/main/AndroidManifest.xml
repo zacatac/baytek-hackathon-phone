@@ -11,9 +11,8 @@
         android:allowBackup="true"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-
         <activity
-            android:name=".MainActivity"
+            android:name=".DefaultActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,15 +20,28 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".VenmoWebViewActivity"
-            android:label="BayTekVenmo">
+            android:label="BayTekVenmo" >
         </activity>
 
         <service
             android:name="com.dquid.sdk.core.BluetoothLEService"
             android:enabled="true" />
+
+        <activity
+            android:name=".DashActivity"
+            android:label="@string/title_activity_dash" >
+        </activity>
+        <activity
+            android:name=".PlayActivity"
+            android:label="@string/title_activity_play"
+            android:parentActivityName=".DashActivity"
+            android:theme="@style/FullscreenTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.dquid.baytektestapp.DashActivity" />
+        </activity>
     </application>
 
 </manifest>
