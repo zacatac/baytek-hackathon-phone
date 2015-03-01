@@ -789,7 +789,7 @@ public class DQBaytekMachine extends BTProtocol implements BTRespListener, BTReq
     @Override
     public Context provideApplicationContext() {
         // DQuid SDK needs the application context, please provide it here;
-        return DefaultActivity.context;
+        return PlayActivity.context;
     }
 
     @Override

@@ -16,6 +16,8 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.dquid.bayteklib.BTMachineType;
+import com.dquid.sdk.core.DQManager;
+import com.dquid.sdk.utils.DQLog;
 
 import java.util.HashMap;
 
@@ -143,6 +145,7 @@ public class DefaultActivity extends ActionBarActivity implements DQBaytekMachin
         setContentView(R.layout.activity_default);
         DefaultActivity.context = DefaultActivity.this;
         initUI();
+        DQLog.setLogLevel(DQLog.DQLOG_VERBOSE);
     }
 
 

@@ -1,20 +1,21 @@
 package com.dquid.baytektestapp;
 
+import com.dquid.bayteklib.BTMachineType;
 import com.dquid.baytektestapp.util.SystemUiHider;
+import com.dquid.sdk.utils.DQLog;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 
 /**
@@ -23,29 +24,104 @@ import org.w3c.dom.Text;
  *
  * @see SystemUiHider
  */
-public class PlayActivity extends Activity {
+public class PlayActivity extends Activity implements DQBaytekMachine.DQBaytekMachineListenerInterface{
+    private static final int REQUEST_CODE_VENMO_APP_SWITCH = 2402;
+    static Context context;
     private TextView gameNameField;
     private TextView gameIdField;
-    private TextView creditsRemainingField;
+    private TextView creditsAddedField;
     private Button addCreditButton;
     private Button gameBrokenButton;
     private Button doneButton;
+    private Button uploadCreditsButton;
+    private TextView gameModeField;
+    private int gameCredits = 0;
+    private DQBaytekMachine myMachine;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
+        PlayActivity.context = PlayActivity.this;
+        DQLog.setLogLevel(DQLog.DQLOG_VERBOSE);
         initUI();
+        connectGame();
     }
 
+    private void getGameOver(){
+        if (myMachine.getGameMode())
+            gameModeField.setText("Game Over");
+        else
+            gameModeField.setText("Keep Playing");
+    }
 
+    private void sendGameCredits(byte gameCredits){
+        myMachine.addCredits(gameCredits);
+        creditsAddedField.setText(gameCredits + " Credits Added");
+
+    }
+    private void connectGame() {
+        myMachine = new DQBaytekMachine(BTMachineType.BAYTEK_MACHINE_TYPE_FLAPPY_BIRD, PlayActivity.this);
+        myMachine.connect();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        switch(requestCode) {
+            case REQUEST_CODE_VENMO_APP_SWITCH: {
+                if(resultCode == RESULT_OK) {
+                    String signedrequest = data.getStringExtra("signedrequest");
+                    if(signedrequest != null) {
+                        VenmoLibrary.VenmoResponse response = (new VenmoLibrary()).validateVenmoPaymentResponse(signedrequest, getString(R.string.venmo_app_secret));
+                        if(response.getSuccess().equals("1")) {
+                            // TODO Take into account float payment amounts
+                            //Payment successful.  Use data from response object to display a success message
+                            String added = response.getAmount();
+                            float addedFloat = Float.parseFloat(added);
+                            int addedInt = Math.round(addedFloat);
+                            gameCredits += addedInt;
+                            sendGameCredits((byte) addedInt);
+                        }
+                    }
+                    else {
+                        String error_message = data.getStringExtra("error_message");
+                        //An error ocurred.  Make sure to display the error_message to the user
+                    }
+                }
+                else if(resultCode == RESULT_CANCELED) {
+                    //The user cancelled the payment
+                }
+                break;
+            }
+        }
+    }
+
+    public void addCredits(String credits){
+        int creditsInt = Integer.parseInt(credits);
+        credits = Integer.toString(creditsInt);
+        Intent venmoIntent = VenmoLibrary.openVenmoPayment("2402", "Kick Ass", "nickwissman@berkeley.edu", credits, "Credits Purchase", "pay");
+        startActivityForResult(venmoIntent, REQUEST_CODE_VENMO_APP_SWITCH);
+    }
     void initUI(){
+        Intent intent = getIntent();
         gameNameField = (TextView) findViewById(R.id.gameNameField);
         gameIdField = (TextView) findViewById(R.id.gameIdField);
-        creditsRemainingField = (TextView) findViewById(R.id.creditsRemainingField);
+        creditsAddedField = (TextView) findViewById(R.id.creditsAddedField);
         addCreditButton = (Button) findViewById(R.id.addCreditButton);
         gameBrokenButton = (Button) findViewById(R.id.gameBrokenButton);
         doneButton = (Button) findViewById(R.id.doneButton);
+        uploadCreditsButton = (Button) findViewById(R.id.uploadCreditsButton);
+        gameModeField = (TextView) findViewById(R.id.gameModeField);
+        uploadCreditsButton.setEnabled(false);
+        addCreditButton.setEnabled(false);
+
+//        getGameOver();
+
+        gameCredits = Integer.parseInt(intent.getStringExtra("credits"));
+        gameNameField.setText(intent.getStringExtra("name"));
+        gameIdField.setText(intent.getStringExtra("id"));
 
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +130,29 @@ public class PlayActivity extends Activity {
             }
         });
 
+        gameBrokenButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
+
+        addCreditButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addCredits("1");
+            }
+        });
+
+        uploadCreditsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gameCredits += 2;
+                sendGameCredits((byte) 2);
+            }
+        });
 
     }
 
@@ -92,4 +191,39 @@ public class PlayActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onConnection() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                uploadCreditsButton.setEnabled(true);
+                addCreditButton.setEnabled(true);
+                if (gameCredits == 0){
+                    sendGameCredits((byte) gameCredits);
+                }
+            }
+        });
+
+    }
+
+    @Override
+    public void onConnectionFailed() {
+
+    }
+
+    @Override
+    public void onDisconnection() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                uploadCreditsButton.setEnabled(false);
+                addCreditButton.setEnabled(false);
+            }
+        });
+    }
+
+    @Override
+    public void onDataUpdated(String name, byte value) {
+
+    }
 }

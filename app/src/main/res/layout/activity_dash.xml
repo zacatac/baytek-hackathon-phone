@@ -49,9 +49,9 @@
         android:layout_height="wrap_content"
         android:text="Add Credits"
         android:id="@+id/addCreditsButton"
-        android:layout_below="@+id/playButton"
-        android:layout_alignRight="@+id/userText"
-        android:layout_alignEnd="@+id/userText" />
+        android:layout_above="@+id/fiveCreditButton"
+        android:layout_alignRight="@+id/fiveCreditButton"
+        android:layout_alignEnd="@+id/fiveCreditButton" />
 
     <Button
         android:layout_width="wrap_content"
@@ -67,12 +67,12 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:id="@+id/creditsAddField"
-        android:layout_alignBottom="@+id/addCreditsButton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:editable="true"
         android:hint="Enter credit amount"
-        android:inputType="number" />
+        android:inputType="number"
+        android:layout_above="@+id/fiveCreditButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -106,4 +106,16 @@
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/fiveCreditButton"
         android:layout_alignEnd="@+id/fiveCreditButton" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/creditsPlayField"
+        android:layout_below="@+id/gameIdField"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:hint="Enter credits to play with" />
+
 </RelativeLayout>
