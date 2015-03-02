@@ -27,3 +27,6 @@ proguard/
 
 #Secrets
 config.xml
+
+#IDE
+.idea/

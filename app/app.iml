@@ -90,6 +90,7 @@
     <orderEntry type="library" exported="" name="commons-jexl-2.1.1" level="project" />
     <orderEntry type="library" exported="" name="support-v4-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="json-simple-1.1.1" level="project" />
+    <orderEntry type="library" exported="" name="androidbootstrap-1.1.0" level="project" />
     <orderEntry type="library" exported="" name="commons-lang3-3.3.2" level="project" />
   </component>
 </module>

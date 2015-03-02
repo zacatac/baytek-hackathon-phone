@@ -12,21 +12,25 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.beardedhen.androidbootstrap.BootstrapButton;
+import com.beardedhen.androidbootstrap.BootstrapEditText;
+import com.beardedhen.androidbootstrap.BootstrapThumbnail;
+
 import java.util.HashMap;
 
 
 public class DashActivity extends Activity {
     private static final int REQUEST_CODE_VENMO_APP_SWITCH = 2402;
     static Context context;
-    private Button addCreditsButton;
-    private Button playButton;
+    private BootstrapButton addCreditsButton;
+    private BootstrapButton playButton;
     private TextView creditsAmt;
     private TextView userText;
-    private EditText creditsAddField;
-    private Button fiveCreditButton;
-    private Button tenCreditButton;
-    private EditText creditsPlayField;
-    private EditText gameIdField;
+    private BootstrapEditText  creditsAddField;
+    private BootstrapButton fiveCreditButton;
+    private BootstrapButton tenCreditButton;
+    private BootstrapEditText creditsPlayField;
+    private BootstrapEditText gameIdField;
     private int numCredits = 0;
     private HashMap<Integer, String> gameIdMap = new HashMap<>();
 
@@ -103,15 +107,15 @@ public class DashActivity extends Activity {
     }
 
     void initUI(){
-        addCreditsButton = (Button) findViewById(R.id.addCreditsButton);
-        playButton = (Button) findViewById(R.id.playButton);
+        addCreditsButton = (BootstrapButton) findViewById(R.id.addCreditsButton);
+        playButton = (BootstrapButton) findViewById(R.id.playButton);
         creditsAmt = (TextView) findViewById(R.id.creditsViewAmt);
         userText = (TextView) findViewById(R.id.userText);
-        creditsAddField = (EditText) findViewById(R.id.creditsAddField);
-        creditsPlayField = (EditText) findViewById(R.id.creditsPlayField);
-        gameIdField = (EditText) findViewById(R.id.gameIdField);
-        fiveCreditButton = (Button) findViewById(R.id.fiveCreditButton);
-        tenCreditButton = (Button) findViewById(R.id.tenCreditButton);
+        creditsAddField = (BootstrapEditText) findViewById(R.id.creditsAddField);
+        creditsPlayField = (BootstrapEditText) findViewById(R.id.creditsPlayField);
+        gameIdField = (BootstrapEditText) findViewById(R.id.gameIdField);
+        fiveCreditButton = (BootstrapButton) findViewById(R.id.fiveCreditButton);
+        tenCreditButton = (BootstrapButton) findViewById(R.id.tenCreditButton);
 
         userText.setText("field.zackery@gmail.com");
 
@@ -126,7 +130,7 @@ public class DashActivity extends Activity {
         addCreditsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                addCredits(creditsAddField.getText().toString());
+                addCredits(creditsAddField.getText().toString());
             }
         });
 

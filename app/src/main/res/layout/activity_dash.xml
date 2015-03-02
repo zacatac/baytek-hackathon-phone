@@ -1,11 +1,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bootstrap="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.dquid.baytektestapp.DashActivity"
-    android:background="#0099cc">
+    tools:context="com.dquid.baytektestapp.DashActivity">
 
     <TextView
         android:layout_width="wrap_content"
@@ -29,13 +30,13 @@
         android:layout_below="@+id/userText"
         android:layout_toRightOf="@+id/creditsView"
         android:layout_alignRight="@+id/userText"
-        android:layout_alignEnd="@+id/userText" />
+        android:layout_alignEnd="@+id/userText"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="username "
+        android:text="username"
         android:id="@+id/userText"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
@@ -44,25 +45,33 @@
         android:layout_alignParentStart="true"
         android:gravity="center_horizontal" />
 
-    <Button
+    <com.beardedhen.androidbootstrap.BootstrapButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add Credits"
         android:id="@+id/addCreditsButton"
         android:layout_above="@+id/fiveCreditButton"
         android:layout_alignRight="@+id/fiveCreditButton"
-        android:layout_alignEnd="@+id/fiveCreditButton" />
+        android:layout_alignEnd="@+id/fiveCreditButton"
+        bootstrap:bb_type="primary"
+        bootstrap:bb_roundedCorners="true"
+        android:layout_toEndOf="@+id/creditsView"
+        android:layout_toRightOf="@+id/creditsView" />
 
-    <Button
+    <com.beardedhen.androidbootstrap.BootstrapButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Play!"
         android:id="@+id/playButton"
         android:layout_below="@+id/creditsViewAmt"
         android:layout_alignRight="@+id/addCreditsButton"
-        android:layout_alignEnd="@+id/addCreditsButton" />
+        android:layout_alignEnd="@+id/addCreditsButton"
+        bootstrap:bb_type="primary"
+        bootstrap:bb_roundedCorners="true"
+        android:layout_toRightOf="@+id/creditsView"
+        android:layout_toEndOf="@+id/creditsView" />
 
-    <EditText
+    <com.beardedhen.androidbootstrap.BootstrapEditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -72,9 +81,12 @@
         android:inputType="number"
         android:layout_above="@+id/fiveCreditButton"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        bootstrap:be_roundedCorners="true"
+        android:layout_alignRight="@+id/creditsPlayField"
+        android:layout_alignEnd="@+id/creditsPlayField" />
 
-    <EditText
+    <com.beardedhen.androidbootstrap.BootstrapEditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="number"
@@ -83,9 +95,12 @@
         android:layout_below="@+id/creditsView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:hint="Enter game id" />
+        android:hint="Enter game id"
+        bootstrap:be_roundedCorners="true"
+        android:layout_toLeftOf="@+id/playButton"
+        android:layout_toStartOf="@+id/playButton" />
 
-    <Button
+    <com.beardedhen.androidbootstrap.BootstrapButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="5 Credits for $5"
@@ -94,9 +109,12 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/userText"
-        android:layout_alignEnd="@+id/userText" />
+        android:layout_alignEnd="@+id/userText"
+        bootstrap:bb_type="success"
+        bootstrap:bb_roundedCorners="true"
+        android:paddingTop="@dimen/activity_vertical_margin"/>
 
-    <Button
+    <com.beardedhen.androidbootstrap.BootstrapButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="10 Credits for $9"
@@ -105,9 +123,12 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/fiveCreditButton"
-        android:layout_alignEnd="@+id/fiveCreditButton" />
+        android:layout_alignEnd="@+id/fiveCreditButton"
+        bootstrap:bb_type="danger"
+        bootstrap:bb_roundedCorners="true"
+        android:paddingTop="@dimen/activity_vertical_margin"/>
 
-    <EditText
+    <com.beardedhen.androidbootstrap.BootstrapEditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="number"
@@ -116,6 +137,9 @@
         android:layout_below="@+id/gameIdField"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:hint="Enter credits to play with" />
+        bootstrap:be_roundedCorners="true"
+        android:hint="Enter credits for game"
+        android:layout_alignRight="@+id/gameIdField"
+        android:layout_alignEnd="@+id/gameIdField" />
 
 </RelativeLayout>

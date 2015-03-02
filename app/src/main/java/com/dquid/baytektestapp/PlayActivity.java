@@ -35,7 +35,7 @@ public class PlayActivity extends Activity implements DQBaytekMachine.DQBaytekMa
     private Button doneButton;
     private Button uploadCreditsButton;
     private TextView gameModeField;
-    private int gameCredits = 0;
+    public static int gameCredits = 0;
     private DQBaytekMachine myMachine;
 
 
@@ -43,22 +43,39 @@ public class PlayActivity extends Activity implements DQBaytekMachine.DQBaytekMa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
+//
+//        int mUIFlag = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+//
+//        getWindow().getDecorView().setSystemUiVisibility(mUIFlag);
+
         PlayActivity.context = PlayActivity.this;
         DQLog.setLogLevel(DQLog.DQLOG_VERBOSE);
         initUI();
         connectGame();
     }
 
-    private void getGameOver(){
-        if (myMachine.getGameMode())
-            gameModeField.setText("Game Over");
-        else
-            gameModeField.setText("Keep Playing");
+    private String getGameOver(){
+        try {
+            if (myMachine.getGameMode())
+                return "Keep Playing";
+            else
+                return "Game Over";
+        } catch (Exception e){
+            return "";
+        }
     }
 
     private void sendGameCredits(byte gameCredits){
         myMachine.addCredits(gameCredits);
-        creditsAddedField.setText(gameCredits + " Credits Added");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                creditsAddedField.setText("");
+                creditsAddedField.setText(PlayActivity.gameCredits+ " Credits Added");
+            }
+        });
 
     }
     private void connectGame() {
@@ -116,8 +133,12 @@ public class PlayActivity extends Activity implements DQBaytekMachine.DQBaytekMa
         gameModeField = (TextView) findViewById(R.id.gameModeField);
         uploadCreditsButton.setEnabled(false);
         addCreditButton.setEnabled(false);
-
-//        getGameOver();
+        if (!getGameOver().equals("")){
+            uploadCreditsButton.setEnabled(true);
+            addCreditButton.setEnabled(true);
+            sendGameCredits((byte) gameCredits);
+            gameModeField.setText(getGameOver());
+        }
 
         gameCredits = Integer.parseInt(intent.getStringExtra("credits"));
         gameNameField.setText(intent.getStringExtra("name"));
@@ -136,8 +157,6 @@ public class PlayActivity extends Activity implements DQBaytekMachine.DQBaytekMa
                 finish();
             }
         });
-
-
 
         addCreditButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,9 +217,8 @@ public class PlayActivity extends Activity implements DQBaytekMachine.DQBaytekMa
             public void run() {
                 uploadCreditsButton.setEnabled(true);
                 addCreditButton.setEnabled(true);
-                if (gameCredits == 0){
-                    sendGameCredits((byte) gameCredits);
-                }
+                sendGameCredits((byte) gameCredits);
+                gameModeField.setText(getGameOver());
             }
         });
 
